@@ -1,25 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import UnitList from "./UnitList";
+import UseFetch from "./service/UseFetch.service";
 
-function App() {
+const App = () => {
+  const [problemUnits, setProblemUnits] = useState([]);
+  const [similarUnits, setSimilarUnits] = useState([]);
+
+  const getProblemUnits = UseFetch(setProblemUnits, 'http://localhost:5000/fe-problem')
+  const getSimilarUnits = UseFetch(setSimilarUnits, 'http://localhost:5000/fe-similars')
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <UnitList units={problemUnits}/>
+    </>
   );
 }
 
