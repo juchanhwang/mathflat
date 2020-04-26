@@ -1,0 +1,23 @@
+ul {
+  display: flex;
+  flex-direction: column;
+}
+
+li {
+  list-style: none;
+  padding: 20px;
+
+  div {
+    display: flex;
+    padding: 10px;
+    border-bottom: 1px solid #F5F5F5;
+
+    > .unitName {
+      flex: 1;
+    }
+  }
+
+  img {
+    display: block;
+  }
+}
