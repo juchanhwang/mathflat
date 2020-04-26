@@ -1,15 +1,15 @@
-import { useEffect } from "react";
-
-const UseFetch = (callback, url) => {
-  const fetchInitialData = async () => {
-    const response = await fetch(url);
-    const { data } = await response.json();
-    callback(data);
-  }
-
-  useEffect(() => {
-    fetchInitialData();
-  }, [])
+const fetchData = (url) => {
+  return fetch(url)
+    .then(res => res.json())
+    .catch(err => {
+      throw err;
+    })
 }
 
-export default UseFetch;
+export const getProblemUnits = () => {
+  return fetchData('http://localhost:5000/fe-problem')
+};
+
+export const getSimilarUnits = () => {
+  return fetchData('http://localhost:5000/fe-similars')
+};
