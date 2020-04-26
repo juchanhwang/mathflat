@@ -1,68 +1,179 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 구조 설계
 
-## Available Scripts
+- App - container component
+    - UnitList (학습지 상세 편집)
+        - Unit
+            - Button
+    - UnitList  (문장 교체/추가)
+        - Unit
+            - Button
 
-In the project directory, you can run:
+## Presentational Components
 
-### `yarn start`
+### Unit Item
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+: 문제를 렌더해주는 item
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```tsx
+UnitItem: {
+	id: number;
+	unitCode: number;
+	unitName: string;
+	problemType: 'Subjective' | 'Multiple';
+  problemUrl: string;
+}
+```
 
-### `yarn test`
+**props**
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- unitInfo
 
-### `yarn build`
+    (id, problemType, unitName, problemUrl)
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- actionData
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+    map 돌면서 버튼들을 렌더 해준다.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    ```jsx
+    actionData:[
+    	{name: '유사문항', action: () => {}}, // 해당 문제가 select되어 있을시, active 되어야 한다.
+    	{name: '삭제', action: () => {}}
+    ]
+    ```
 
-### `yarn eject`
+유사문제를 보여주고, 삭제를 하는 행동의 책임은 Unit item 컴포넌트가 가지고 있지 않다.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Button
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- 버튼 스타일을 가지고 있다.
+- active, deactive css 가 있다.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Unit List
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+:문제리스트와 타이틀, 서브 타이틀을 가지고 있는 컴포넌트
 
-## Learn More
+**props**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- title: string
+- subTitle?: string
+- unitData: Unit[]
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+unitData가 없을 시에는 props로 받은 noticeComponent를 띄워준다.
+- 컴포넌트를 props로 넘겨줄 수 있나? children을 사용
 
-### Code Splitting
+## Container Component
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### App
 
-### Analyzing the Bundle Size
+: 문제 list데이터와 상태를 가지고 있는 컴포넌트 (class로 만들기)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+**props**
 
-### Making a Progressive Web App
+**states**
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+- problemUnitList: UnitItem[]
+- similerUnitList: UnitItem[]
+- selectedUnit: UnitItem
 
-### Advanced Configuration
+**methods**
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+- deleteUnit(unit)
+- swapUnit(unit, targetUnit)
+- addUnit(unit)
 
-### Deployment
+**data fetching**
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+- 문제 list를 로딩해야 한다.
 
-### `yarn build` fails to minify
+**TODO**
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+리액트 프레젠 테이셔널 컴포넌트, 컨테이너 컴포넌트 확인하기## 구조 설계
+                                 
+                                 - App - container component
+                                     - UnitList (학습지 상세 편집)
+                                         - Unit
+                                             - Button
+                                     - UnitList  (문장 교체/추가)
+                                         - Unit
+                                             - Button
+                                 
+                                 ## Presentational Components
+                                 
+                                 ### Unit Item
+                                 
+                                 : 문제를 렌더해주는 item
+                                 
+                                 ```tsx
+                                 UnitItem: {
+                                 	id: number;
+                                 	unitCode: number;
+                                 	unitName: string;
+                                 	problemType: 'Subjective' | 'Multiple';
+                                   problemUrl: string;
+                                 }
+                                 ```
+                                 
+                                 **props**
+                                 
+                                 - unitInfo
+                                 
+                                     (id, problemType, unitName, problemUrl)
+                                 
+                                 - actionData
+                                 
+                                     map 돌면서 버튼들을 렌더 해준다.
+                                 
+                                     ```jsx
+                                     actionData:[
+                                     	{name: '유사문항', action: () => {}}, // 해당 문제가 select되어 있을시, active 되어야 한다.
+                                     	{name: '삭제', action: () => {}}
+                                     ]
+                                     ```
+                                 
+                                 유사문제를 보여주고, 삭제를 하는 행동의 책임은 Unit item 컴포넌트가 가지고 있지 않다.
+                                 
+                                 ### Button
+                                 
+                                 - 버튼 스타일을 가지고 있다.
+                                 - active, deactive css 가 있다.
+                                 
+                                 ### Unit List
+                                 
+                                 :문제리스트와 타이틀, 서브 타이틀을 가지고 있는 컴포넌트
+                                 
+                                 **props**
+                                 
+                                 - title: string
+                                 - subTitle?: string
+                                 - unitData: Unit[]
+                                 
+                                 unitData가 없을 시에는 props로 받은 noticeComponent를 띄워준다.
+                                 - 컴포넌트를 props로 넘겨줄 수 있나? children을 사용
+                                 
+                                 ## Container Component
+                                 
+                                 ### App
+                                 
+                                 : 문제 list데이터와 상태를 가지고 있는 컴포넌트 (class로 만들기)
+                                 
+                                 **props**
+                                 
+                                 **states**
+                                 
+                                 - problemUnitList: UnitItem[]
+                                 - similerUnitList: UnitItem[]
+                                 - selectedUnit: UnitItem
+                                 
+                                 **methods**
+                                 
+                                 - deleteUnit(unit)
+                                 - swapUnit(unit, targetUnit)
+                                 - addUnit(unit)
+                                 
+                                 **data fetching**
+                                 
+                                 - 문제 list를 로딩해야 한다.
+                                 
+                                 **TODO**
+                                 
+                                 리액트 프레젠 테이셔널 컴포넌트, 컨테이너 컴포넌트 확인하기
